@@ -1,0 +1,67 @@
+<!-- campaignContentPreview.html -->
+<template>
+    <section role="dialog" tabindex="-1" aria-modal="true" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <!-- Modal Header -->
+            <header class="slds-modal__header">
+                <lightning-button-icon
+                    class="slds-modal__close"
+                    icon-name="utility:close"
+                    variant="bare-inverse"
+                    onclick={closeModal}
+                    alternative-text="Close">
+                </lightning-button-icon>
+                <h2 class="slds-text-heading_medium">Content Preview</h2>
+            </header>
+
+            <!-- Modal Body -->
+            <div class="slds-modal__content slds-p-around_medium">
+                <template if:true={showLoading}>
+                    <div class="slds-is-relative slds-p-around_medium">
+                        <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+                    </div>
+                </template>
+
+                <template if:true={fileData}>
+                    <!-- PDF Preview -->
+                    <template if:true={isPdfFile}>
+                        <div class="slds-p-around_medium pdf-container">
+                            <iframe src={fileUrl} width="100%" height="500px" class="pdf-frame"></iframe>
+                        </div>
+                    </template>
+
+                    <!-- Image Preview -->
+                    <template if:true={isImageFile}>
+                        <div class="slds-p-around_medium image-container">
+                            <img src={fileUrl} alt="Preview" class="preview-image"/>
+                        </div>
+                    </template>
+
+                    <!-- Other File Types -->
+                    <template if:true={isOtherFile}>
+                        <div class="slds-p-around_medium slds-text-align_center">
+                            <lightning-icon icon-name="doctype:unknown" size="large" class="slds-m-bottom_small"></lightning-icon>
+                            <p class="slds-text-body_regular">
+                                This file type cannot be previewed. Click below to download.
+                            </p>
+                            <lightning-button 
+                                label="Download File" 
+                                variant="brand" 
+                                onclick={downloadFile} 
+                                class="slds-m-top_small">
+                            </lightning-button>
+                        </div>
+                    </template>
+                </template>
+
+                <template if:true={error}>
+                    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert">
+                        <span class="slds-assistive-text">Error</span>
+                        <h2>{error}</h2>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
